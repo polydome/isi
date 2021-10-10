@@ -1,13 +1,21 @@
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.XPath;
 
 namespace L1
 {
-    public class XPathWarehousesReader : WarehousesDataReader
+    public class XPathReader : WarehousesDataReader
     {
-        public XPathWarehousesReader(string voivodeship) : base(voivodeship, "XPath")
+        private const string NamespacePrefix = "ns0";
+        private const string NamespaceUri = "http://rejestrymedyczne.csioz.gov.pl/rhf/eksport-danych-v1.0";
+
+        private const string ActiveWarehousesInOpole =
+            "/ns0:Hurtownie/ns0:Hurtownia[@status='Aktywna' and ./ns0:Adres[@miejscowosc='Opole']]";
+
+        private const string AllWarehouses = "/ns0:Hurtownie/ns0:Hurtownia";
+        private const string WarehouseVoivodeship = "string(ns0:Adres/@wojewodztwo)";
+
+        public XPathReader(string voivodeship) : base(voivodeship, "XPath")
         {
         }
 
@@ -47,14 +55,5 @@ namespace L1
 
             return manager;
         }
-
-        private const string NamespacePrefix = "ns0";
-        private const string NamespaceUri = "http://rejestrymedyczne.csioz.gov.pl/rhf/eksport-danych-v1.0";
-
-        private const string ActiveWarehousesInOpole =
-            "/ns0:Hurtownie/ns0:Hurtownia[@status='Aktywna' and ./ns0:Adres[@miejscowosc='Opole']]";
-
-        private const string AllWarehouses = "/ns0:Hurtownie/ns0:Hurtownia";
-        private const string WarehouseVoivodeship = "string(ns0:Adres/@wojewodztwo)";
     }
 }

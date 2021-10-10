@@ -2,9 +2,9 @@ using System.Xml;
 
 namespace L1
 {
-    public class DomWarehousesDataReader : WarehousesDataReader
+    public class DomReader : WarehousesDataReader
     {
-        public DomWarehousesDataReader(string voivodeship) : base(voivodeship, "DOM")
+        public DomReader(string voivodeship) : base(voivodeship, "DOM")
         {
         }
 
@@ -26,7 +26,7 @@ namespace L1
             return data;
         }
     }
-    
+
     internal static partial class XmlWarehouseExtension
     {
         public static Warehouse ReadWarehouse(this XmlNode node)

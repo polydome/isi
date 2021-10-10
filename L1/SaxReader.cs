@@ -2,11 +2,11 @@ using System.Xml;
 
 namespace L1
 {
-    public class SaxWarehousesDataReader : WarehousesDataReader
+    public class SaxReader : WarehousesDataReader
     {
         private readonly XmlReaderSettings _settings = BuildReaderSettings();
 
-        public SaxWarehousesDataReader(string voivodeship) : base(voivodeship, "SAX")
+        public SaxReader(string voivodeship) : base(voivodeship, "SAX")
         {
         }
 
@@ -28,18 +28,24 @@ namespace L1
             return data;
         }
 
-        private static XmlReaderSettings BuildReaderSettings() => new XmlReaderSettings
+        private static XmlReaderSettings BuildReaderSettings()
         {
-            IgnoreComments = true,
-            IgnoreProcessingInstructions = true,
-            IgnoreWhitespace = true
-        };
+            return new XmlReaderSettings
+            {
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true
+            };
+        }
     }
 
     internal static partial class XmlWarehouseExtension
     {
-        public static bool IsAtWarehouseNode(this XmlReader reader) => reader.NodeType == XmlNodeType.Element &&
-                                                                       reader.Name == "Hurtownia";
+        public static bool IsAtWarehouseNode(this XmlReader reader)
+        {
+            return reader.NodeType == XmlNodeType.Element &&
+                   reader.Name == "Hurtownia";
+        }
 
         public static Warehouse ReadWarehouse(this XmlReader reader)
         {

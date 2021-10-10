@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Xml;
-using System.Xml.XPath;
 
 namespace L1
 {
@@ -20,16 +18,16 @@ namespace L1
             if (args.Length < 1)
                 ExitWithError("Nie podano województwa.");
 
-            new Program(selectedVoivodeship: args[0]).Run();
+            new Program(args[0]).Run();
         }
 
         private void Run()
         {
             WarehousesDataReader[] readers =
             {
-                new DomWarehousesDataReader(_selectedVoivodeship),
-                new SaxWarehousesDataReader(_selectedVoivodeship),
-                new XPathWarehousesReader(_selectedVoivodeship),
+                new DomReader(_selectedVoivodeship),
+                new SaxReader(_selectedVoivodeship),
+                new XPathReader(_selectedVoivodeship)
             };
 
             foreach (var reader in readers)
@@ -49,16 +47,12 @@ namespace L1
 
             Console.WriteLine("Ranking aktywnych:");
             foreach (var entry in data.ThreeVoivodeshipsWithLargestActiveCount)
-            {
                 Console.WriteLine("\t{0} ({1})", entry.Key, entry.Value);
-            }
 
             Console.WriteLine("Ranking nieaktywnych:");
             foreach (var entry in data.ThreeVoivodeshipsWithLargestInactiveCount)
-            {
                 Console.WriteLine("\t{0} ({1})", entry.Key, entry.Value);
-            }
-            
+
             Console.WriteLine("");
         }
 

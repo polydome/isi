@@ -1,20 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace L1
 {
     public class WarehousesData
     {
-        private int _opoleActiveCount;
         private readonly Dictionary<string, int> _voivodeshipActiveCount;
         private readonly Dictionary<string, int> _voivodeshipInactiveCount;
 
         public WarehousesData(int opoleActiveCount, string voivodeship, Dictionary<string, int> voivodeshipActiveCount,
             Dictionary<string, int> voivodeshipInactiveCount)
         {
-            _opoleActiveCount = opoleActiveCount;
+            OpoleActiveCount = opoleActiveCount;
             Voivodeship = voivodeship;
             _voivodeshipActiveCount = voivodeshipActiveCount;
             _voivodeshipInactiveCount = voivodeshipInactiveCount;
@@ -43,7 +40,7 @@ namespace L1
         public string VoivodeshipWithLargestInactiveCount =>
             _voivodeshipActiveCount.Aggregate((x, y) => x.Value > y.Value ? y : x).Key;
 
-        public int OpoleActiveCount => _opoleActiveCount;
+        public int OpoleActiveCount { get; private set; }
 
         public IEnumerable<KeyValuePair<string, int>> ThreeVoivodeshipsWithLargestActiveCount =>
             _voivodeshipActiveCount
@@ -58,7 +55,7 @@ namespace L1
         public void IncludeWarehouse(Warehouse warehouse)
         {
             if (warehouse.City == "opole" && warehouse.Status == "aktywna")
-                _opoleActiveCount++;
+                OpoleActiveCount++;
 
             if (warehouse.Status == "aktywna")
                 IncrementVoivodeshipActiveCount(warehouse.Voivodeship);

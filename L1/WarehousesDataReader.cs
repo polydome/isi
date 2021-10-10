@@ -2,7 +2,7 @@ namespace L1
 {
     public abstract class WarehousesDataReader
     {
-        protected string Voivodeship;
+        protected readonly string Voivodeship;
 
         protected WarehousesDataReader(string voivodeship, string extractionApproach)
         {
@@ -10,8 +10,8 @@ namespace L1
             ExtractionApproach = extractionApproach;
         }
 
-        public abstract WarehousesData ReadXmlFile(string path);
-
         public string ExtractionApproach { get; }
+
+        public abstract WarehousesData ReadXmlFile(string path);
     }
 }
