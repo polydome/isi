@@ -1,4 +1,6 @@
-namespace L1
+using L1.Model;
+
+namespace L1.Reader
 {
     public abstract class WarehousesDataReader
     {

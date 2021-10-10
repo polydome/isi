@@ -1,6 +1,7 @@
 using System.Xml;
+using L1.Model;
 
-namespace L1
+namespace L1.Reader
 {
     public class DomReader : WarehousesDataReader
     {

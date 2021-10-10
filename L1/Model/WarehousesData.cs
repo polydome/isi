@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace L1
+namespace L1.Model
 {
     public class WarehousesData
     {

@@ -1,4 +1,4 @@
-namespace L1
+namespace L1.Model
 {
     public class Warehouse
     {
