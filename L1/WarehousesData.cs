@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace L1
@@ -6,12 +8,23 @@ namespace L1
     public class WarehousesData
     {
         private int _opoleActiveCount;
-        private Dictionary<string, int> _voivodeshipActiveCount = new Dictionary<string, int>();
-        private Dictionary<string, int> _voivodeshipInactiveCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _voivodeshipActiveCount;
+        private readonly Dictionary<string, int> _voivodeshipInactiveCount;
+
+        public WarehousesData(int opoleActiveCount, string voivodeship, Dictionary<string, int> voivodeshipActiveCount,
+            Dictionary<string, int> voivodeshipInactiveCount)
+        {
+            _opoleActiveCount = opoleActiveCount;
+            Voivodeship = voivodeship;
+            _voivodeshipActiveCount = voivodeshipActiveCount;
+            _voivodeshipInactiveCount = voivodeshipInactiveCount;
+        }
 
         public WarehousesData(string voivodeship)
         {
             Voivodeship = voivodeship;
+            _voivodeshipActiveCount = new Dictionary<string, int>();
+            _voivodeshipInactiveCount = new Dictionary<string, int>();
         }
 
         public string Voivodeship { get; }
@@ -31,6 +44,16 @@ namespace L1
             _voivodeshipActiveCount.Aggregate((x, y) => x.Value > y.Value ? y : x).Key;
 
         public int OpoleActiveCount => _opoleActiveCount;
+
+        public IEnumerable<KeyValuePair<string, int>> ThreeVoivodeshipsWithLargestActiveCount =>
+            _voivodeshipActiveCount
+                .OrderByDescending(x => x.Value)
+                .Take(3);
+
+        public IEnumerable<KeyValuePair<string, int>> ThreeVoivodeshipsWithLargestInactiveCount =>
+            _voivodeshipInactiveCount
+                .OrderByDescending(x => x.Value)
+                .Take(3);
 
         public void IncludeWarehouse(Warehouse warehouse)
         {

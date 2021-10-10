@@ -46,6 +46,7 @@
         <Compile Include="Warehouse.cs" />
         <Compile Include="WarehousesData.cs" />
         <Compile Include="WarehousesDataReader.cs" />
+        <Compile Include="XPathWarehousesReader.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Assets\data.xml">

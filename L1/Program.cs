@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
+using System.Xml.XPath;
 
 namespace L1
 {
@@ -27,6 +29,7 @@ namespace L1
             {
                 new DomWarehousesDataReader(_selectedVoivodeship),
                 new SaxWarehousesDataReader(_selectedVoivodeship),
+                new XPathWarehousesReader(_selectedVoivodeship),
             };
 
             foreach (var reader in readers)
@@ -43,6 +46,19 @@ namespace L1
                 data.VoivodeshipActiveCount, data.VoivodeshipInactiveCount);
             Console.WriteLine("Najwięcej aktywnych: {0}, najwięcej nieaktywnych: {1}",
                 data.VoivodeshipWithLargestActiveCount, data.VoivodeshipWithLargestInactiveCount);
+
+            Console.WriteLine("Ranking aktywnych:");
+            foreach (var entry in data.ThreeVoivodeshipsWithLargestActiveCount)
+            {
+                Console.WriteLine("\t{0} ({1})", entry.Key, entry.Value);
+            }
+
+            Console.WriteLine("Ranking nieaktywnych:");
+            foreach (var entry in data.ThreeVoivodeshipsWithLargestInactiveCount)
+            {
+                Console.WriteLine("\t{0} ({1})", entry.Key, entry.Value);
+            }
+            
             Console.WriteLine("");
         }
 
