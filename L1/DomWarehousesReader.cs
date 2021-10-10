@@ -2,36 +2,39 @@ using System.Xml;
 
 namespace L1
 {
-    public class DomWarehousesReader : IWarehousesReader
+    public class DomWarehousesDataReader : WarehousesDataReader
     {
-        private readonly XmlDocument _doc = new XmlDocument();
-        
-        public void LoadXmlFile(string path)
+        public DomWarehousesDataReader(string voivodeship) : base(voivodeship, "DOM")
         {
-            _doc.Load(path);
         }
 
-        public WarehousesBreakdown ReadWarehousesBreakdownForVoivodeship(string voivodeship)
+        public override WarehousesData ReadXmlFile(string path)
         {
-            int activeCount = 0;
-            int inactiveCount = 0;
-            var warehouse = _doc.GetElementsByTagName("Hurtownia");
-    
-            foreach(XmlNode node in warehouse)
-            { 
-                string nodeVoivodeship = node.FirstChild.Attributes.GetNamedItem("wojewodztwo").Value.ToLower();
-                string nodeStatus = node.Attributes.GetNamedItem("status").Value.ToLower();
-                
-                if (nodeVoivodeship != voivodeship)
-                    continue;
-                
-                if (nodeStatus == "nieaktywna")
-                    inactiveCount++;
-                else
-                    activeCount++;
+            var data = new WarehousesData(Voivodeship);
+
+            var doc = new XmlDocument();
+            doc.Load(path);
+
+            var warehouseNodes = doc.GetElementsByTagName("Hurtownia");
+
+            foreach (XmlNode node in warehouseNodes)
+            {
+                var warehouse = node.ReadWarehouse();
+                data.IncludeWarehouse(warehouse);
             }
 
-            return new WarehousesBreakdown(activeCount, inactiveCount);
+            return data;
+        }
+    }
+    
+    internal static partial class XmlWarehouseExtension
+    {
+        public static Warehouse ReadWarehouse(this XmlNode node)
+        {
+            var voivodeship = node.FirstChild.Attributes.GetNamedItem("wojewodztwo").Value.ToLower();
+            var city = node.FirstChild.Attributes.GetNamedItem("miejscowosc").Value.ToLower();
+            var status = node.Attributes.GetNamedItem("status").Value.ToLower();
+            return new Warehouse(voivodeship, city, status);
         }
     }
 }

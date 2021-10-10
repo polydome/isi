@@ -42,8 +42,10 @@
         <Compile Include="DomWarehousesReader.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="WarehousesBreakdown.cs" />
-        <Compile Include="IWarehousesReader.cs" />
+        <Compile Include="SaxWarehouseReader.cs" />
+        <Compile Include="Warehouse.cs" />
+        <Compile Include="WarehousesData.cs" />
+        <Compile Include="WarehousesDataReader.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Assets\data.xml">
