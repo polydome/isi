@@ -1,10 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace L1
 {
     public class WarehousesData
     {
         private int _opoleActiveCount;
-        private int _voivodeshipInactiveCount;
-        private int _voivodeshipActiveCount;
+        private Dictionary<string, int> _voivodeshipActiveCount = new Dictionary<string, int>();
+        private Dictionary<string, int> _voivodeshipInactiveCount = new Dictionary<string, int>();
 
         public WarehousesData(string voivodeship)
         {
@@ -13,9 +16,19 @@ namespace L1
 
         public string Voivodeship { get; }
 
-        public int VoivodeshipActiveCount => _voivodeshipActiveCount;
+        public int VoivodeshipActiveCount => _voivodeshipActiveCount.ContainsKey(Voivodeship)
+            ? _voivodeshipActiveCount[Voivodeship]
+            : 0;
 
-        public int VoivodeshipInactiveCount => _voivodeshipInactiveCount;
+        public int VoivodeshipInactiveCount => _voivodeshipInactiveCount.ContainsKey(Voivodeship)
+            ? _voivodeshipInactiveCount[Voivodeship]
+            : 0;
+
+        public string VoivodeshipWithLargestActiveCount =>
+            _voivodeshipActiveCount.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+
+        public string VoivodeshipWithLargestInactiveCount =>
+            _voivodeshipActiveCount.Aggregate((x, y) => x.Value > y.Value ? y : x).Key;
 
         public int OpoleActiveCount => _opoleActiveCount;
 
@@ -24,13 +37,22 @@ namespace L1
             if (warehouse.City == "opole" && warehouse.Status == "aktywna")
                 _opoleActiveCount++;
 
-            if (warehouse.Voivodeship == Voivodeship)
-            {
-                if (warehouse.Status == "aktywna")
-                    _voivodeshipActiveCount++;
-                else
-                    _voivodeshipInactiveCount++;
-            }
+            if (warehouse.Status == "aktywna")
+                IncrementVoivodeshipActiveCount(warehouse.Voivodeship);
+            else
+                IncrementVoivodeshipInactiveCount(warehouse.Voivodeship);
+        }
+
+        private void IncrementVoivodeshipActiveCount(string voivodeship)
+        {
+            _voivodeshipActiveCount.TryGetValue(voivodeship, out var value);
+            _voivodeshipActiveCount[voivodeship] = value + 1;
+        }
+
+        private void IncrementVoivodeshipInactiveCount(string voivodeship)
+        {
+            _voivodeshipInactiveCount.TryGetValue(voivodeship, out var value);
+            _voivodeshipInactiveCount[voivodeship] = value + 1;
         }
     }
 }

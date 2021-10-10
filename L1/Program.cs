@@ -10,14 +10,14 @@ namespace L1
 
         private Program(string selectedVoivodeship)
         {
-            this._selectedVoivodeship = selectedVoivodeship;
+            _selectedVoivodeship = selectedVoivodeship;
         }
 
         public static void Main(string[] args)
         {
             if (args.Length < 1)
                 ExitWithError("Nie podano województwa.");
-            
+
             new Program(selectedVoivodeship: args[0]).Run();
         }
 
@@ -28,19 +28,21 @@ namespace L1
                 new DomWarehousesDataReader(_selectedVoivodeship),
                 new SaxWarehousesDataReader(_selectedVoivodeship),
             };
-            
+
             foreach (var reader in readers)
                 PresentWarehousesDataReader(reader);
         }
 
         private void PresentWarehousesDataReader(WarehousesDataReader reader)
         {
-            WarehousesData data = reader.ReadXmlFile(_path);
-            
+            var data = reader.ReadXmlFile(_path);
+
             Console.WriteLine("XML loaded with {0} approach", reader.ExtractionApproach);
             Console.WriteLine("Opole: {0} aktywnych", data.OpoleActiveCount);
             Console.WriteLine("{0}: {1} nieaktywnych, {2} aktywnych", data.Voivodeship,
                 data.VoivodeshipActiveCount, data.VoivodeshipInactiveCount);
+            Console.WriteLine("Najwięcej aktywnych: {0}, najwięcej nieaktywnych: {1}",
+                data.VoivodeshipWithLargestActiveCount, data.VoivodeshipWithLargestInactiveCount);
             Console.WriteLine("");
         }
 
