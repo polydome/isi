@@ -25,10 +25,13 @@ namespace L1.Reader
             var navigator = new XPathDocument(path).CreateNavigator();
             var namespaceManager = BuildNamespaceManager(navigator.NameTable);
 
-            var allWarehouses = navigator.Select(AllWarehouses, namespaceManager);
+            var data = new WarehousesData(
+                voivodeship: Voivodeship,
+                opoleActiveCount: navigator.Select(ActiveWarehousesInOpole, namespaceManager).Count,
+                voivodeshipActiveCount: new Dictionary<string, int>(),
+                voivodeshipInactiveCount: new Dictionary<string, int>());
 
-            var voivodeshipActiveCount = new Dictionary<string, int>();
-            var voivodeshipInactiveCount = new Dictionary<string, int>();
+            var allWarehouses = navigator.Select(AllWarehouses, namespaceManager);
 
             foreach (XPathNavigator warehouse in allWarehouses)
             {
@@ -36,17 +39,10 @@ namespace L1.Reader
                 var voivodeship = (rawVoivodeship as string)?.ToLower();
                 var status = warehouse.GetAttribute("status", "").ToLower();
 
-                var dictionary = status == "aktywna" ? voivodeshipActiveCount : voivodeshipInactiveCount;
-
-                dictionary.TryGetValue(voivodeship, out var value);
-                dictionary[voivodeship] = value + 1;
+                data.IncludeWarehouse(new Warehouse(voivodeship, "", status));
             }
-
-            return new WarehousesData(
-                voivodeship: Voivodeship,
-                opoleActiveCount: navigator.Select(ActiveWarehousesInOpole, namespaceManager).Count,
-                voivodeshipActiveCount: voivodeshipActiveCount,
-                voivodeshipInactiveCount: voivodeshipInactiveCount);
+            
+            return data;
         }
 
         private static XmlNamespaceManager BuildNamespaceManager(XmlNameTable nameTable)
