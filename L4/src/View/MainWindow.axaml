@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="L4.View.MainWindow"
+        Title="L4">
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="10" Name="LabelSurfaceArea">SurfaceArea</TextBlock>
+            <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputSurfaceArea" Value="0" Width="150" />
+            <TextBlock Margin="30, 10, 10, 10" Name="LabelFreedomOfChoice">FreedomOfChoice</TextBlock>
+            <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputFreedomOfChoice" Value="0" Width="150" />
+            <TextBlock Margin="30, 10, 10, 10" Name="LabelLadderScore">LadderScore</TextBlock>
+            <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputLadderScore" Value="0" Width="150" />
+        </StackPanel>
+        <Grid>
+            <DataGrid Name="WorldDataGrid" AutoGenerateColumns="True" />
+        </Grid>
+    </StackPanel>
+</Window>
