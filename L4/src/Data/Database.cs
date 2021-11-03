@@ -70,9 +70,12 @@ namespace L4.Data
             }
         }
 
-        public List<T> RetrieveData<T>(string query, Func<IDataRecord, T> parse)
+        public List<T> RetrieveData<T>(string query, Func<IDataRecord, T> parse, IEnumerable<MySqlParameter> parameters)
         {
             MySqlCommand command = BuildCommand(query);
+
+            foreach (var param in parameters)
+                command.Parameters.Add(param);
 
             var results = new List<T>();
 

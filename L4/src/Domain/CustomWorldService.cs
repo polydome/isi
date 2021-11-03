@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using L4.Data;
 
 namespace L4.Domain
 {
-    public class CustomWorldService
+    public partial class CustomWorldService
     {
         private readonly CustomWorldRepository _customWorldRepository;
         private readonly DataWorldRepository _dataWorldRepository;
@@ -17,21 +18,25 @@ namespace L4.Domain
             _customWorldRepository = customWorldRepository;
         }
 
-        public IEnumerable<DataCustomWorld> RepopulateCustomWorldDatabase()
+        public IEnumerable<DataCustomWorld> RepopulateCustomWorldDatabase(ThresholdSettings thresholdSettings)
         {
-            var countries = _dataWorldRepository.findAll();
-            var reports = _raportWhrRepository.findAll();
+            var countries = _dataWorldRepository.FindAll(thresholdSettings);
+            var reports = _raportWhrRepository.FindAll(thresholdSettings);
 
             Dictionary<string, DataCustomWorld> countryNameToCustomWorld = new();
 
-            foreach (var country in countries)
-                countryNameToCustomWorld[country.Name] = DataCustomWorld.FromCountryData(country);
-
             foreach (var report in reports)
-                if (countryNameToCustomWorld.ContainsKey(report.Name))
-                    countryNameToCustomWorld[report.Name].FillWhrData(report);
+                countryNameToCustomWorld[report.Name] = DataCustomWorld.FromReport(report);
 
-            var records = countryNameToCustomWorld.Values;
+            foreach (var country in countries)
+                if (countryNameToCustomWorld.ContainsKey(country.Name))
+                    countryNameToCustomWorld[country.Name].FillCountryData(country);
+
+            // Omits WHR entries with incomplete country data
+            var records = countryNameToCustomWorld.Values
+                .Where(country => country.Code.Length > 0)
+                .ToList();
+            
             _customWorldRepository.replaceAll(records);
 
             return records;

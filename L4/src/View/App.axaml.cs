@@ -19,16 +19,16 @@ namespace L4.View
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var mainWindow = new MainWindow();
-                desktop.MainWindow = mainWindow;
-
-                var mainController = diContainer.Get<MainController>();
-                mainController.View = mainWindow;
-
                 var database = diContainer.Get<Database>();
                 database.OpenConnection();
-
-                mainController.Compile();
+                
+                var mainWindow = diContainer.Get<MainWindow>();
+                var mainController = diContainer.Get<MainController>();
+                
+                mainWindow.Controller = mainController;
+                mainController.View = mainWindow;
+                
+                desktop.MainWindow = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();

@@ -7,14 +7,29 @@
         Title="L4">
 
     <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="10" Name="LabelSurfaceArea">SurfaceArea</TextBlock>
-            <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputSurfaceArea" Value="0" Width="150" />
-            <TextBlock Margin="30, 10, 10, 10" Name="LabelFreedomOfChoice">FreedomOfChoice</TextBlock>
-            <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputFreedomOfChoice" Value="0" Width="150" />
-            <TextBlock Margin="30, 10, 10, 10" Name="LabelLadderScore">LadderScore</TextBlock>
-            <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputLadderScore" Value="0" Width="150" />
-        </StackPanel>
+        <Grid ColumnDefinitions="* * *" RowDefinitions="* *">
+            <StackPanel Margin="20" Orientation="Horizontal">
+                <TextBlock Padding="10" Name="LabelSurfaceArea">SurfaceArea</TextBlock>
+                <NumericUpDown Name="InputSurfaceArea" Value="0" Width="150" />
+            </StackPanel>
+            <StackPanel Margin="20" Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <TextBlock Padding="10" Name="LabelFreedomOfChoice">FreedomOfChoice</TextBlock>
+                <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputFreedomOfChoice" Value="0" Width="150" />
+            </StackPanel>
+            <StackPanel Margin="20" Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+                <TextBlock Padding="10" Name="LabelLadderScore">LadderScore</TextBlock>
+                <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputLadderScore" Value="0" Width="150" />
+            </StackPanel>
+            <StackPanel Margin="20" Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                <TextBlock Padding="10" Name="LabelPopulation">Population</TextBlock>
+                <NumericUpDown Name="InputPopulation" Value="0" Width="150" />
+            </StackPanel>
+            <StackPanel Margin="20" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                <TextBlock Padding="10" Name="LabelGdpPerCapita">GDPPerCapita</TextBlock>
+                <NumericUpDown FormatString="#.000" Increment="0.001" Name="InputGdpPerCapita" Value="0" Width="150" />
+            </StackPanel>
+            <Button Grid.Row="1" Grid.Column="2" Name="Compile" Click="Compile_OnClick">Kompiluj</Button>
+        </Grid>
         <Grid>
             <DataGrid Name="WorldDataGrid" AutoGenerateColumns="True" />
         </Grid>

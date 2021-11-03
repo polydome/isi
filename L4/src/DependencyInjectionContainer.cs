@@ -30,6 +30,7 @@ namespace L4
             _factories[typeof(RaportWHRRepository)] = () => new RaportWHRRepository(Get<Database>());
             _factories[typeof(CustomWorldRepository)] = () => new CustomWorldRepository(Get<Database>());
             _factories[typeof(MainController)] = () => new MainController(Get<CustomWorldService>());
+            _factories[typeof(MainWindow)] = () => new MainWindow();
 
             // Singletons
             var database = new Database(Get<IErrorHandler>());

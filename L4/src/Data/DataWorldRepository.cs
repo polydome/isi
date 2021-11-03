@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Data;
 using L4.Domain;
+using MySql.Data.MySqlClient;
 
 namespace L4.Data
 {
     public class DataWorldRepository
     {
-        private const string SelectAllWorldData = "SELECT * FROM world.country";
+        private const string SelectAllWorldData = "SELECT * FROM world.country WHERE SurfaceArea >= ?minSurfaceArea AND Population >= ?minPopulation";
         private readonly Database _database;
 
         public DataWorldRepository(Database database)
@@ -14,9 +15,13 @@ namespace L4.Data
             _database = database;
         }
 
-        public IEnumerable<DataWorld> findAll()
+        public IEnumerable<DataWorld> FindAll(ThresholdSettings thresholdSettings)
         {
-            return _database.RetrieveData(SelectAllWorldData, ParseDataWorldRecord);
+            return _database.RetrieveData(SelectAllWorldData, ParseDataWorldRecord, new []
+            {
+                new MySqlParameter("minSurfaceArea", thresholdSettings.SurfaceArea),
+                new MySqlParameter("minPopulation", thresholdSettings.Population),
+            });
         }
 
         private static DataWorld ParseDataWorldRecord(IDataRecord record)
